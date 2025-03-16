@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Seite nicht gefunden</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #e6edf3;
+            --accent-color: #58a6ff;
+            --error-color: #f85149;
+            --success-color: #56d364;
+            --code-bg: #161b22;
+            --code-border: #30363d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .terminal {
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            border: 1px solid var(--code-border);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--code-border);
+        }
+
+        .terminal-dots {
+            display: flex;
+            margin-right: 15px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .dot:nth-child(1) {
+            background-color: var(--error-color);
+        }
+
+        .dot:nth-child(2) {
+            background-color: #daa520;
+        }
+
+        .dot:nth-child(3) {
+            background-color: var(--success-color);
+        }
+
+        .terminal-title {
+            color: var(--text-color);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        .terminal-content {
+            min-height: 200px;
+        }
+
+        .command-line {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .prompt {
+            color: var(--success-color);
+            margin-right: 10px;
+        }
+
+        .cursor {
+            background-color: var(--accent-color);
+            display: inline-block;
+            width: 10px;
+            height: 18px;
+            margin-left: 5px;
+            animation: blink 1s step-end infinite;
+        }
+
+        .error {
+            color: var(--error-color);
+            margin: 10px 0;
+        }
+
+        .code-snippet {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 4px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .comment {
+            color: #8b949e;
+        }
+
+        .keyword {
+            color: #ff7b72;
+        }
+
+        .string {
+            color: #a5d6ff;
+        }
+
+        .function {
+            color: #d2a8ff;
+        }
+
+        .back-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .back-button:hover {
+            background-color: #80bdff;
+            transform: translateY(-2px);
+        }
+
+        .matrix-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.05;
+            overflow: hidden;
+        }
+
+        .matrix-column {
+            position: absolute;
+            top: -100px;
+            width: 30px;
+            color: var(--success-color);
+            font-size: 1.2rem;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @keyframes fall {
+            to { transform: translateY(1500px); }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+            }
+            .terminal {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-bg" id="matrix-background"></div>
+    
+    <div class="container">
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="terminal-dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+                <div class="terminal-title">Terminal - bash - 80x24</div>
+            </div>
+            <div class="terminal-content">
+                <div class="command-line">
+                    <span class="prompt">root@syscgn:~#</span>
+                    <span>curl -I https://syscgn.de/requested-page</span>
+                </div>
+                <div class="error">HTTP/1.1 404 Not Found</div>
+                <div class="command-line">
+                    <span class="prompt">user@server:~$</span>
+                    <span>sudo find / -name "requested-page" 2&gt;/dev/null</span>
+                </div>
+                <div class="error">No results found.</div>
+                <div class="command-line">
+                    <span class="prompt">root@syscgn:~#</span>
+                    <span>cat /var/log/apache2/error.log | grep "requested-page" | tail -n 1</span>
+                </div>
+                <div class="error">[error] [client ::1] File does not exist: /var/www/html/requested-page</div>
+                <div class="command-line">
+                    <span class="prompt">user@server:~$</span>
+                    <span>echo $?</span>
+                </div>
+                <div>404</div>
+                <div class="code-snippet">
+                    <span class="comment">// Seite wiederherstellen.js</span><br>
+                    <span class="keyword">function</span> <span class="function">findPage</span>() {<br>
+                    &nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> page = <span class="function">fetchPage</span>(<span class="string">'requested-page'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> page;<br>
+                    &nbsp;&nbsp;} <span class="keyword">catch</span> (err) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw new</span> Error(<span class="string">'404: Seite nicht gefunden'</span>);<br>
+                    &nbsp;&nbsp;}<br>
+                    }
+                </div>
+                <div class="command-line">
+                    <span class="prompt">root@syscgn:~#</span>
+                    <span>cd /root</span><span class="cursor"></span>
+                </div>
+            </div>
+        </div>
+        
+        <h1>404 - Seite nicht gefunden</h1>
+        <p>Diese Seite existiert nicht oder wurde in ein anderes Repository verschoben.</p>
+        <p>Hast du versucht, sie im Cache wiederherzustellen oder ein git reset --hard durchzuführen?</p>
+        
+        <a href="/" class="back-button">Zurück zur Startseite</a>
+    <p style="margin-top: 20px;">
+        <a href="https://github.com/Warex2020" target="_blank" style="color: var(--accent-color); text-decoration: none; display: flex; align-items: center; justify-content: center;">
+            <svg height="24" width="24" viewBox="0 0 16 16" style="margin-right: 8px;">
+                <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+            </svg>
+            Warex2020 auf GitHub
+        </a>
+    </p>
+    </div>
+
+    <script>
+        // Matrix-Hintergrund-Effekt
+        function createMatrixBackground() {
+            const matrixBg = document.getElementById('matrix-background');
+            const chars = '01'.split('');
+            const columnCount = Math.floor(window.innerWidth / 30);
+            
+            for (let i = 0; i < columnCount; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-column';
+                column.style.left = i * 30 + 'px';
+                
+                const columnHeight = Math.floor(Math.random() * 20) + 5;
+                const fallSpeed = Math.floor(Math.random() * 15) + 5;
+                
+                column.style.animationDuration = fallSpeed + 's';
+                
+                let columnContent = '';
+                for (let j = 0; j < columnHeight; j++) {
+                    columnContent += chars[Math.floor(Math.random() * chars.length)] + '<br>';
+                }
+                
+                column.innerHTML = columnContent;
+                matrixBg.appendChild(column);
+            }
+        }
+
+        // Blinkender Cursor-Effekt
+        function typeWriterEffect() {
+            const terminalContent = document.querySelector('.terminal-content');
+            const commandLines = terminalContent.querySelectorAll('.command-line');
+            
+            commandLines.forEach((line, index) => {
+                if (index < commandLines.length - 1) {
+                    const textContent = line.querySelector('span:not(.prompt)').textContent;
+                    line.querySelector('span:not(.prompt)').textContent = '';
+                    
+                    let charIndex = 0;
+                    const typeChar = () => {
+                        if (charIndex < textContent.length) {
+                            line.querySelector('span:not(.prompt)').textContent += textContent.charAt(charIndex);
+                            charIndex++;
+                            setTimeout(typeChar, Math.random() * 50 + 30);
+                        }
+                    };
+                    
+                    setTimeout(() => {
+                        typeChar();
+                    }, index * 2000);
+                }
+            });
+        }
+
+        window.onload = function() {
+            createMatrixBackground();
+            typeWriterEffect();
+        };
+    </script>
+</body>
+</html>
